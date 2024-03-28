@@ -1,5 +1,5 @@
 {
-    "name": "pkgxpantry",
+    "name": "pkgx-pantry",
     "version": "1.0.0",
     "description": "A module for managing packages from pkgx.dev",
     "main": "index.js",
@@ -7,7 +7,7 @@
       "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "Andrii Riabchenko",
-    "repository": "https://github.com/ArionThinker/pkgxpantry",
+    "repository": "https://github.com/ArionThinker/pkgx-pantry",
     "license": "CC0-1.0",
     "dependencies": {
       "axios": "^0.24.0"
