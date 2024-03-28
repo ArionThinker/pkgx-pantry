@@ -2,8 +2,8 @@ const axios = require('axios');
 
 class PkgxPantry {
   constructor() {
-    this.PANTRY_URL = 'https://pkgx.dev/pkgs/index.json';
-    this.VERSIONS_URL = 'https://dist.pkgx.dev/php.net/versions.txt';
+    this.PANTRY_URL = 'https://app.pkgx.dev/v1/packages';
+    this.VERSIONS_URL = 'https://app.pkgx.dev/v1/packages/{{slug}}';
   }
 
   async getPackages() {
@@ -19,20 +19,23 @@ class PkgxPantry {
   async searchPackages(query) {
     const packages = await this.getPackages();
     return packages.filter(pkg => {
-      return pkg.project.includes(query) || pkg.name.includes(query);
+      return pkg.slug.includes(query) || pkg.name.includes(query) || pkg.full_name.includes(query);
     });
   }
 
-  async getVersions(project) {
+  async getVersions(slug, platform = 'darwin', arch = 'x86-64') {
     try {
-      const response = await axios.get(this.VERSIONS_URL);
-      const versions = response.data.split('\n');
-      return versions.filter(version => version.includes(project));
+        const url = this.VERSIONS_URL.replace('{{slug}}', slug);
+        const response = await axios.get(url);
+        const versions = response.data.bottles.filter(bottle => bottle.platform === platform && bottle.arch === arch);
+
+        return versions.map(version => version.version);
     } catch (error) {
-      console.error('Failed to fetch versions:', error);
-      return [];
+        console.error('Failed to fetch versions:', error);
+        return [];
     }
-  }
+}
+
 }
 
 module.exports = new PkgxPantry();
